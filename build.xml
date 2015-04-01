@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="phingtest" default="build">
+    <property name="basedir" value="${phing.dir}" />
+    <property name="appdir"  value="${basedir}/application" />
+    <property name="datadir" value="${basedir}/data" />
+    <property name="logdir"  value="${datadir}/build/logs" />
+    <target name="build" depends="clean,prepare,phpunit">
+    </target>
+    <target name="clean" description="clean">
+        <delete dir="${logdir}" />
+        <delete dir="${datadir}/build/coverage" />
+        <delete dir="${datadir}/build/phpdoc" />
+    </target>
+    <target name="prepare" description="prepare">
+        <mkdir dir="${logdir}" />
+        <mkdir dir="${datadir}/build/coverage" />
+        <mkdir dir="${datadir}/build/phpdoc" />
+    </target>
+    <target name="phpunit" description="run phpunit">
+        <exec dir="${basedir}/tests" executable="phpunit" output="${logdir}/phpunit.log">
+            <arg line="--configuration=${basedir}/tests/phpunit.xml" />
+            <arg line="--log-junit=${logdir}/phpunit.xml" />
+            <arg line="--coverage-html=${datadir}/build/coverage/" />
+            <arg line="--coverage-clover=${logdir}/coverage.xml" />
+        </exec>
+    </target>
+</project>
