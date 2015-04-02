@@ -17,7 +17,7 @@
         <mkdir dir="${datadir}/build/phpdoc" />
     </target>
     <target name="composer" description="composer">
-        <composer command="install">
+        <composer command="install" composer="/usr/local/bin/composer">
             <arg value="--dev" />
         </composer>
     </target>
