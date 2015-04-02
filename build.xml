@@ -4,7 +4,7 @@
     <property name="appdir"  value="${basedir}/application" />
     <property name="datadir" value="${basedir}/data" />
     <property name="logdir"  value="${datadir}/build/logs" />
-    <target name="build" depends="clean,prepare,phpunit">
+    <target name="build" depends="clean,prepare,composer,phpunit">
     </target>
     <target name="clean" description="clean">
         <delete dir="${logdir}" />
@@ -15,13 +15,15 @@
         <mkdir dir="${logdir}" />
         <mkdir dir="${datadir}/build/coverage" />
         <mkdir dir="${datadir}/build/phpdoc" />
+    </target>
+    <target name="composer" description="composer">
         <composer command="install">
             <arg value="--dev" />
         </composer>
     </target>
     <target name="phpunit" description="run phpunit">
-        <exec dir="${basedir}/tests" executable="phpunit" output="${logdir}/phpunit.log">
-            <arg line="--configuration=${basedir}/tests/phpunit.xml" />
+        <exec dir="${basedir}/tests" executable="${basedir}/vendor/bin/phpunit" output="${logdir}/phpunit.log">
+            <arg line="--configuration=${basedir}/phpunit.xml.dist" />
             <arg line="--log-junit=${logdir}/phpunit.xml" />
             <arg line="--coverage-html=${datadir}/build/coverage/" />
             <arg line="--coverage-clover=${logdir}/coverage.xml" />
