@@ -15,6 +15,9 @@
         <mkdir dir="${logdir}" />
         <mkdir dir="${datadir}/build/coverage" />
         <mkdir dir="${datadir}/build/phpdoc" />
+        <composer command="install">
+            <arg value="--dev" />
+        </composer>
     </target>
     <target name="phpunit" description="run phpunit">
         <exec dir="${basedir}/tests" executable="phpunit" output="${logdir}/phpunit.log">
