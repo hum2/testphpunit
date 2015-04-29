@@ -4,7 +4,8 @@
     <property name="appdir"  value="${basedir}/application" />
     <property name="datadir" value="${basedir}/data" />
     <property name="logdir"  value="${datadir}/build/logs" />
-    <target name="build" depends="clean,prepare,composer,phpunit">
+    <property name="bindir"  value="${basedir}/vendor/bin" />
+    <target name="build" depends="clean,prepare,composer,phpunit,phpmd,phpcs">
     </target>
     <target name="clean" description="clean">
         <delete dir="${logdir}" />
@@ -22,11 +23,19 @@
         </composer>
     </target>
     <target name="phpunit" description="run phpunit">
-        <exec dir="${basedir}/tests" executable="${basedir}/vendor/bin/phpunit" output="${logdir}/phpunit.log">
+        <exec dir="${basedir}/tests" executable="${bindir}/phpunit" output="${logdir}/phpunit.log">
             <arg line="--configuration=${basedir}/phpunit.xml.dist" />
             <arg line="--log-junit=${logdir}/phpunit.xml" />
             <arg line="--coverage-html=${datadir}/build/coverage/" />
             <arg line="--coverage-clover=${logdir}/coverage.xml" />
         </exec>
+    </target>
+    <!-- PHPMD -->
+    <target name="phpmd">
+        <exec command="${bindir}/phpmd ${basedir}/src xml ${basedir}/phpmd.xml --reportfile ${logdir}/phpmd.xml" />
+    </target>
+    <!-- PHPCS -->
+    <target name="phpcs">
+        <exec command="${bindir}/phpcs --report=checkstyle --report-file=${logdir}/checkstyle.xml --standard=PSR2 ${basedir}/src" />
     </target>
 </project>
